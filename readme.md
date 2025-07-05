@@ -45,7 +45,6 @@ You’ll need:
 - Your Google Sheet name & tab pre-set with headers
 
 ---
-
 ### 🚀 Inspired by Allora
 
 This project was built as a practical demo of Allora’s “self-improving” AI design — with public model evaluation, transparent scoring, and real-time performance logging.
