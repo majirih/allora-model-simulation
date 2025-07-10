@@ -1,25 +1,26 @@
-from utils import get_prediction_data
 from sheet import append_to_sheet
 from price_fetcher import get_actual_btc_price
-
-def calculate_accuracy(predicted, actual):
-    return round((1 - abs(predicted - actual) / actual) * 100, 2)
+from allora_api import fetch_allora_prediction
 
 def run_prediction_workflow():
-    print("Running prediction workflow...")
+    print("🚀 Running prediction workflow...")
 
+    # Fetch prediction from Allora
+    prediction_data = fetch_allora_prediction()
+    print("🧠 Allora Prediction Response:", prediction_data)
+
+    if prediction_data is None:
+        print("❌ No prediction received from Allora.")
+        return
+
+    predicted_price = prediction_data["prediction"]
     actual_price = get_actual_btc_price()
-    print(f"📈 Actual BTC Price: ${actual_price}")
 
-    model_predictions = get_prediction_data(base_price=actual_price)
-    print("🧠 Predictions:", model_predictions)
+    accuracy = 100 - abs((predicted_price - actual_price) / actual_price * 100)
 
-    model_accuracies = {
-        model: calculate_accuracy(pred, actual_price)
-        for model, pred in model_predictions.items()
-    }
+    print(f"📈 Predicted: {predicted_price}, Actual: {actual_price}, Accuracy: {accuracy:.2f}%")
 
-    append_to_sheet(model_predictions, actual_price, model_accuracies)
+    append_to_sheet(predicted_price, actual_price, accuracy)
 
 if __name__ == "__main__":
     run_prediction_workflow()

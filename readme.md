@@ -1,52 +1,42 @@
-# 🧠 Allora Model Simulation
+# 📊 Allora Live Prediction Dashboard
 
-This project is a simplified, public simulation inspired by [@AlloraNetwork](https://twitter.com/AlloraNetwork). It mimics how decentralized AI models are evaluated, scored, and ranked in real-time using live market data.
+A real-time dashboard that displays predictions from the [Allora Network](https://allora.network), focusing on **Topic 47: BTC/USDT 5-minute prediction**.
 
-### ⚙️ What It Does
-
-- Simulates 3 mock models: `gML_Alpha`, `gML_Beta`, `gML_Gamma`
-- Predicts real-time BTC prices around current market value
-- Fetches the actual BTC/USD price from CoinGecko
-- Calculates prediction accuracy for each model
-- Logs everything into a connected Google Sheet
-- Auto-updates a `Model Report` leaderboard (average accuracy + win count)
-
-### 📊 How It Works
-
-- `main.py` – the brain of the workflow
-- `utils.py` – generates random predictions
-- `price_fetcher.py` – gets actual BTC/USD price
-- `sheet.py` – connects to and writes to Google Sheets
-- `credentials.json` – NOT included (use your own service account key)
-- `.gitignore` – excludes sensitive and environment files
-
-### 🧪 Example Output
-
-| Date       | Model       | Asset | Predicted Price | Actual Price | Accuracy |
-|------------|-------------|--------|------------------|---------------|----------|
-| 2025-07-04 | gML_Alpha   | BTC    | 108221.33        | 107987.22     | 99.78%   |
-
-### 🏆 Leaderboard (Auto-updated)
-
-| Model       | Avg Accuracy (%) | Wins | Total Predictions |
-|-------------|------------------|------|--------------------|
-| gML_Alpha   | 99.3%            | 3    | 5                  |
-| gML_Beta    | 98.7%            | 1    | 5                  |
-| gML_Gamma   | 98.9%            | 1    | 5                  |
+> This project fetches on-chain inference results from Allora's testnet API, logs them into Google Sheets, and displays them via a Next.js frontend deployed on Vercel.
 
 ---
 
-### 🔐 Setup Notes
+##  Tech Stack
 
-You’ll need:
-- A [Google Cloud service account](https://console.cloud.google.com/)
-- Enabled Google Sheets + Drive API
-- A `credentials.json` file (excluded from repo)
-- Your Google Sheet name & tab pre-set with headers
+- **Allora API** — Source of real-time BTC/USDT predictions  
+- **Google Sheets** — Stores predicted and actual prices  
+- **Next.js + React** — Dashboard frontend  
+- **Vercel** — Hosting and continuous deployment  
+- **Python** — Backend logger that runs periodically via Task Scheduler  
 
 ---
-### 🚀 Inspired by Allora
 
-This project was built as a practical demo of Allora’s “self-improving” AI design — with public model evaluation, transparent scoring, and real-time performance logging.
+## Key Features
 
-Follow [@AlloraNetwork](https://twitter.com/AlloraNetwork) to understand the future of decentralized intelligence.
+- **Live Dashboard** — Displays most recent prediction with:
+  - Predicted Price
+  - Actual Price (from CoinGecko)
+  - Accuracy %
+  - Prediction Timestamp
+
+- **Auto-Refreshing Data** — Pulls data from Google Sheets on load  
+- **Secure API Key Handling** — via `.env.local` and Vercel Secrets  
+
+---
+
+## Live Project
+
+- **Frontend**: [allora-dashboard.vercel.app](https://allora-dashboard.vercel.app)  
+- **Code**: [GitHub Repository](https://github.com/majirih/allora-dashboard)
+
+---
+
+## Prediction Source
+
+```bash
+https://allora-api.testnet.allora.network/emissions/v9/latest_network_inferences_outlier_resistant/47
