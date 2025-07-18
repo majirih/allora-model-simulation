@@ -1,4 +1,4 @@
-from gspread_formatting import set_cell_format, CellFormat, NumberFormat
+from gspread_formatting import format_cell_range, CellFormat, NumberFormat
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
@@ -19,17 +19,17 @@ def append_to_sheet(predicted_price, actual_price, accuracy):
 
     # Prepare the row
     today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    accuracy_decimal = accuracy / 100  # Format as decimal for % formatting
-    row = [today_date, "Allora API", "BTC/USDT", predicted_price, actual_price, accuracy_decimal]
+    row = [today_date, "Allora API", "BTC/USDT", predicted_price, actual_price, round(accuracy, 2)]
 
     # Append the row
     sheet.append_row(row)
     print("✅ Prediction logged to Google Sheets.")
 
-    # Apply % format to the accuracy cell
+    # Apply % format to the accuracy cell (last row, column F)
     last_row_index = len(sheet.get_all_values())
-    formatting = CellFormat(numberFormat=NumberFormat(type='PERCENT', pattern='0.00%'))
-    set_cell_format(sheet, f'F{last_row_index}', formatting)
+    format_cell_range(sheet, f'F{last_row_index}', CellFormat(
+        numberFormat=NumberFormat(type='NUMBER', pattern='0.00%')
+    ))
 
 def log_prediction_only(predicted_price, block_height):
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -82,12 +82,12 @@ def update_actual_price(actual_price):
             # Update actual price and accuracy
             sheet.update_cell(i + 1, 5, actual_price)  # Column E
             accuracy = 100 - abs((predicted - actual_price) / actual_price * 100)
-            accuracy_decimal = accuracy / 100
-            sheet.update_cell(i + 1, 6, accuracy_decimal)  # Column F
+            sheet.update_cell(i + 1, 6, round(accuracy, 2))  # Column F = raw number
 
-            # Apply formatting
-            formatting = CellFormat(numberFormat=NumberFormat(type='PERCENT', pattern='0.00%'))
-            set_cell_format(sheet, f'F{i + 1}', formatting)
+            # Format the cell as percentage
+            format_cell_range(sheet, f'F{i + 1}', CellFormat(
+                numberFormat=NumberFormat(type='NUMBER', pattern='0.00%')
+            ))
 
             print(f"✅ Row {i + 1} updated: Actual={actual_price}, Accuracy={round(accuracy, 2)}%")
         else:
