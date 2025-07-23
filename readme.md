@@ -1,42 +1,59 @@
 # 📊 Allora Live Prediction Dashboard
 
-A real-time dashboard that displays predictions from the [Allora Network](https://allora.network), focusing on **Topic 47: BTC/USDT 5-minute prediction**.
+A real-time dashboard that displays predictions from the [Allora Network](https://allora.network), now supporting **multiple timeframes**:
+
+- **5-minute forecast** (Topic 47)  
+- **8-hour forecast** (Topic 42)  
+- **24-hour forecast** (Topic 61)
 
 > This project fetches on-chain inference results from Allora's testnet API, logs them into Google Sheets, and displays them via a Next.js frontend deployed on Vercel.
 
 ---
 
-##  Tech Stack
+## 🧰 Tech Stack
 
 - **Allora API** — Source of real-time BTC/USDT predictions  
-- **Google Sheets** — Stores predicted and actual prices  
+- **Google Sheets** — Stores predicted and actual prices for 5min, 8H, and 24H timeframes  
 - **Next.js + React** — Dashboard frontend  
 - **Vercel** — Hosting and continuous deployment  
-- **Python** — Backend logger that runs periodically via Task Scheduler  
+- **Python** — Backend logging script with Task Scheduler for automation  
 
 ---
 
-## Key Features
+## 🚀 Key Features
 
-- **Live Dashboard** — Displays most recent prediction with:
-  - Predicted Price
-  - Actual Price (from CoinGecko)
-  - Accuracy %
-  - Prediction Timestamp
+- **Multi-Timeframe Dashboard**  
+  View predictions for:
+  - **5min** (Topic 47)
+  - **8H** (Topic 42)
+  - **24H** (Topic 61, log-return converted to absolute price)
 
-- **Auto-Refreshing Data** — Pulls data from Google Sheets on load  
-- **Secure API Key Handling** — via `.env.local` and Vercel Secrets  
+- **Live Forecast Display**
+  - Predicted Price  
+  - Actual Price (via CoinGecko)  
+  - Accuracy %  
+  - Timestamp  
+  - Block Height  
+
+- **Auto-Refreshing Data**  
+  - Pulls data from Google Sheets on page load  
+  - Dynamic switching via query param:  
+    `?timeframe=5min` / `8H` / `24H`
+
+- **Secure API Key Management**  
+  - Environment variables via `.env.local` and Vercel dashboard  
 
 ---
 
-## Live Project
+## 🌐 Live Deployment
 
 - **Frontend**: [allora-dashboard.vercel.app](https://allora-dashboard.vercel.app)  
-- **Code**: [GitHub Repository](https://github.com/majirih/allora-dashboard)
+- **Codebase**: [GitHub Repo](https://github.com/majirih/allora-dashboard)
 
 ---
 
-## Prediction Source
+## 🔌 Allora API Endpoints
 
+- **5min (Topic 47)**  
 ```bash
 https://allora-api.testnet.allora.network/emissions/v9/latest_network_inferences_outlier_resistant/47
