@@ -1,22 +1,22 @@
 # predict_price.py
 
-from allora_api import fetch_allora_prediction
+from allora_api import fetch_5min_prediction
 from price_fetcher import get_actual_btc_price
 from sheet import log_prediction_only
 
 def run_prediction():
-    print(" Running prediction logging...")
+    print("🔁 Running prediction logging...")
 
-    prediction = fetch_allora_prediction()
+    prediction = fetch_5min_prediction()
     if not prediction:
-        print(" No prediction received from Allora.")
+        print("❌ No prediction received from Allora.")
         return
 
-    predicted_price = prediction["prediction"]
+    predicted_price = prediction["predicted_price"]
     timestamp = prediction["timestamp"]
 
-    print(f" Logged Predicted: {predicted_price} at block {timestamp}")
-    log_prediction_only(predicted_price, timestamp)
+    print(f"✅ Logged Predicted: {predicted_price} at block {timestamp}")
+    log_prediction_only(predicted_price, timestamp, "5-min")  # <-- Include timeframe label
 
 if __name__ == "__main__":
     run_prediction()
