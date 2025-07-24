@@ -1,7 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from gspread_formatting import format_cell_range, CellFormat, NumberFormat
-from datetime import datetime
+from datetime import datetime, timezone
 
 # ------------------------ GOOGLE SHEETS AUTH ------------------------
 
@@ -35,11 +35,7 @@ def log_prediction_only(predicted_price, timestamp, timeframe):
     print(f"📄 Using worksheet: {worksheet_name}")
     sheet = client.open("Allora_Model_Performance_Report").worksheet(worksheet_name)
     print("✅ Worksheet opened successfully.")
-    print("📎 Spreadsheet URL:", sheet.spreadsheet.url)
-    spreadsheet = client.open("Allora_Model_Performance_Report")
-    print("🧾 Available worksheets:", [ws.title for ws in spreadsheet.worksheets()])
-
-
+    
     now = datetime.now().strftime("%Y-%m-%d")
     row = [now, timeframe, "BTC/USDT", predicted_price, "", "", timestamp]
     print(f"📝 Prepared row to append: {row}")
@@ -53,32 +49,60 @@ def log_prediction_only(predicted_price, timestamp, timeframe):
     except Exception as e:
         print(f"❌ Failed to log {timeframe} prediction:", e)
 
-
-def update_actual_price(actual_price):
-    """Update 5-min actual price and compute accuracy."""
+def update_actual_price(actual_price, target_timestamp_iso):
+    """Update 5-min actual price and compute accuracy based on approximate timestamp match."""
     client = authorize_gspread()
     sheet = client.open("Allora_Model_Performance_Report").worksheet("5min Forecast")
     data = sheet.get_all_values()
 
-    for i in reversed(range(1, len(data))):
-        if data[i][4] == "":  # E column (Actual Price) is empty
+    # Parse ISO target timestamp into datetime, then convert to UNIX
+    try:
+        target_dt = datetime.fromisoformat(target_timestamp_iso)
+    except ValueError:
+        print("❌ Invalid target timestamp format.")
+        return False
+
+    target_unix = int(target_dt.replace(tzinfo=timezone.utc).timestamp())
+
+    for i in range(1, len(data)):
+        row = data[i]
+        if len(row) < 7:
+            continue
+
+        sheet_ts_str = row[6].strip()
+        actual_col = row[4].strip()
+
+        try:
+            # Handle both ISO and UNIX strings in the sheet
+            if "T" in sheet_ts_str:
+                sheet_dt = datetime.fromisoformat(sheet_ts_str)
+                sheet_unix = int(sheet_dt.replace(tzinfo=timezone.utc).timestamp())
+            else:
+                sheet_unix = int(float(sheet_ts_str))
+        except Exception as e:
+            print(f"⛔️ Skipping row {i+1} due to timestamp parse error: {e}")
+            continue
+
+        if abs(sheet_unix - target_unix) <= 30 and actual_col == "":
             try:
-                predicted_price = float(data[i][3])  # D column
+                predicted_price = float(row[3])
                 accuracy = 1 - abs(predicted_price - actual_price) / actual_price
 
-                sheet.update_cell(i + 1, 5, actual_price)          # E column
-                sheet.update_cell(i + 1, 6, round(accuracy, 4))    # F column
+                sheet.update_cell(i + 1, 5, actual_price)          # Column E: Actual Price
+                sheet.update_cell(i + 1, 6, round(accuracy, 4))    # Column F: Accuracy
 
                 format_cell_range(sheet, f'F{i + 1}', CellFormat(
                     numberFormat=NumberFormat(type='NUMBER', pattern='0.00%')
                 ))
 
-                print("✅ 5-min actual price + accuracy updated:", actual_price, round(accuracy, 4))
-                return
+                print(f"✅ Actual + Accuracy updated for row {i+1}: {actual_price}, {round(accuracy, 4)}")
+                return True
             except Exception as e:
-                print("❌ Error updating 5-min actual price:", e)
-                return
+                print(f"❌ Error updating sheet at row {i+1}: {e}")
+                return False
 
+    print("⚠️ No matching row found within ±30s of provided timestamp.")
+    return False
 # ------------------------ 24H FORECAST FUNCTIONS ------------------------
 
 def log_24h_prediction_only(predicted_price, timestamp):
@@ -96,7 +120,6 @@ def log_24h_prediction_only(predicted_price, timestamp):
         print("✅ 24H prediction logged.")
     except Exception as e:
         print("❌ Failed to log 24H prediction:", e)
-
 
 def update_24h_actual_price(actual_price):
     """Update 24H actual price and compute accuracy."""
