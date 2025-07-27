@@ -1,5 +1,3 @@
-# predict_price.py
-
 from allora_api import fetch_5min_prediction
 from sheet import log_prediction_only
 
@@ -10,6 +8,8 @@ def run_prediction():
     if not prediction:
         print("❌ No prediction received from Allora.")
         return
+
+    print("📦 Raw prediction response:", prediction)
 
     predicted_price = prediction["predicted_price"]
     timestamp = prediction["timestamp"]

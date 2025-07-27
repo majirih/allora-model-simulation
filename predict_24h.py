@@ -1,36 +1,33 @@
 from allora_api import fetch_24h_log_return
+from sheet import log_prediction_only
 from price_fetcher import get_actual_btc_price
-from sheet import log_24h_prediction_only
-import math
-from datetime import datetime, timezone
+import json
 
-def run_24h_prediction():
-    print("📈 Running 24H prediction logging...")
+def run_prediction():
+    print("🔁 Running 24h prediction (log-return format)...")
 
-    # Get current BTC price
-    btc_price = get_actual_btc_price()
-    if not btc_price:
+    # Get current BTC price (needed to convert log-return to absolute price)
+    current_price = get_actual_btc_price()
+    if not current_price:
         print("❌ Failed to fetch current BTC price.")
         return
 
-    # Get forecast (requires current price)
-    forecast = fetch_24h_log_return(btc_price)
-    if not forecast:
-        print("❌ No forecast received.")
+    prediction = fetch_24h_log_return(current_price)
+    if not prediction:
+        print("❌ No 24h prediction received from Allora.")
         return
 
-    # Convert ISO 8601 timestamp string to UTC datetime
-    dt_object = datetime.fromisoformat(forecast["timestamp"].replace("Z", "+00:00"))
+    predicted_price = prediction["predicted_price"]
+    timestamp = prediction["timestamp"]
 
-    # Convert log-return to absolute price
-    predicted_price = btc_price * math.exp(forecast["log_return"])
+    print(f"📦 24h predicted absolute price: {predicted_price} at {timestamp}")
+    log_prediction_only(predicted_price, timestamp, "24h")
 
-    # Log to Google Sheet — only passing predicted_price and timestamp now
-    try:
-        log_24h_prediction_only(round(predicted_price, 2), forecast["timestamp"])
-        print("✅ Logged 24H prediction:", round(predicted_price, 2), forecast["timestamp"])
-    except Exception as e:
-        print(f"❌ Failed to log 24H prediction: {e}")
+    # Save timestamp for actual logger
+    with open("last_predicted_24h.json", "w") as f:
+        json.dump({"timestamp": timestamp}, f)
+
+    print("✅ 24h prediction logged and timestamp saved.")
 
 if __name__ == "__main__":
-    run_24h_prediction()
+    run_prediction()

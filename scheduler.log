@@ -137,3 +137,49 @@
 2025-07-24 20:49:16,140 [INFO] \U0001f7e2 Triggering actual_8h.py @ 2025-07-24 20:49:16
 2025-07-24 20:49:16,141 [INFO] \U0001f7e1 Running actual_8h.py @ 2025-07-24 20:49:16
 2025-07-24 20:49:17,693 [INFO] \u2705 Finished actual_8h.py
+2025-07-24 21:47:10,797 [INFO] \U0001f680 Scheduler started. Waiting for tasks to trigger...
+2025-07-24 21:47:10,797 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-24 21:47:10
+2025-07-24 21:47:16,422 [INFO] \u2705 Finished predict_8h.py
+2025-07-24 21:47:16,423 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-24 21:47:16,423 [INFO] \U0001f7e1 Running predict_24h.py @ 2025-07-24 21:47:16
+2025-07-24 21:47:22,037 [INFO] \u2705 Finished predict_24h.py
+2025-07-24 21:47:22,037 [INFO] \u23f3 Waiting 1440 min before running actual_24h.py
+2025-07-25 06:23:25,944 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-25 06:23:25
+2025-07-25 06:23:31,627 [INFO] \u2705 Finished predict_8h.py
+2025-07-25 06:23:31,631 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-25 06:26:40,427 [INFO] \U0001f680 Scheduler started. Waiting for tasks to trigger...
+2025-07-25 06:26:40,429 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-25 06:26:40
+2025-07-25 06:26:42,552 [INFO] \u2705 Finished predict_8h.py
+2025-07-25 06:26:42,553 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-25 06:26:42,553 [INFO] \U0001f7e1 Running predict_24h.py @ 2025-07-25 06:26:42
+2025-07-25 06:26:47,924 [ERROR] \u274c Error running predict_24h.py: Command '['C:\\Users\\DELL\\OneDrive\\Documents\\allora_predictor\\venv\\Scripts\\python.exe', 'predict_24h.py']' returned non-zero exit status 1.
+2025-07-25 06:26:47,925 [INFO] \u23f3 Waiting 1440 min before running actual_24h.py
+2025-07-25 09:51:25,783 [INFO] \U0001f680 Scheduler started. Waiting for tasks to trigger...
+2025-07-25 09:51:25,821 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-25 09:51:25
+2025-07-25 09:51:29,813 [INFO] \u2705 Finished predict_8h.py
+2025-07-25 09:51:29,814 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-25 09:51:29,815 [INFO] \U0001f7e1 Running predict_24h.py @ 2025-07-25 09:51:29
+2025-07-25 09:51:30,986 [ERROR] \u274c Error running predict_24h.py: Command '['C:\\Users\\DELL\\OneDrive\\Documents\\allora_predictor\\venv\\Scripts\\python.exe', 'predict_24h.py']' returned non-zero exit status 1.
+2025-07-25 09:51:30,987 [INFO] \u23f3 Waiting 1440 min before running actual_24h.py
+2025-07-26 09:17:32,502 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-26 09:17:32
+2025-07-26 09:17:42,735 [INFO] \u2705 Finished predict_8h.py
+2025-07-26 09:17:42,739 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-26 09:51:42,795 [INFO] \U0001f7e1 Running predict_24h.py @ 2025-07-26 09:51:42
+2025-07-26 09:51:49,353 [INFO] \u2705 Finished predict_24h.py
+2025-07-26 09:51:49,364 [INFO] \u23f3 Waiting 1440 min before running actual_24h.py
+2025-07-26 10:17:45,011 [INFO] \U0001f680 Scheduler started. Waiting for tasks to trigger...
+2025-07-26 10:17:45,012 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-26 10:17:45
+2025-07-26 10:17:50,946 [INFO] \u2705 Finished predict_8h.py
+2025-07-26 10:17:50,949 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-26 10:17:50,949 [INFO] \U0001f7e1 Running predict_24h.py @ 2025-07-26 10:17:50
+2025-07-26 10:17:57,527 [INFO] \u2705 Finished predict_24h.py
+2025-07-26 10:17:57,529 [INFO] \u23f3 Waiting 1440 min before running actual_24h.py
+2025-07-26 19:27:27,103 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-26 19:27:27
+2025-07-26 19:27:35,318 [INFO] \u2705 Finished predict_8h.py
+2025-07-26 19:27:35,319 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-27 03:28:02,424 [INFO] \U0001f7e1 Running predict_8h.py @ 2025-07-27 03:28:02
+2025-07-27 03:28:06,667 [INFO] \u2705 Finished predict_8h.py
+2025-07-27 03:28:06,669 [INFO] \u23f3 Waiting 480 min before running actual_8h.py
+2025-07-27 04:42:16,502 [INFO] \U0001f7e2 Triggering actual_8h.py @ 2025-07-27 04:42:16
+2025-07-27 04:42:16,504 [INFO] \U0001f7e1 Running actual_8h.py @ 2025-07-27 04:42:16
+2025-07-27 04:42:21,554 [INFO] \u2705 Finished actual_8h.py
