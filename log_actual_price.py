@@ -17,7 +17,7 @@ def run_actual_logging():
         return
 
     try:
-        updated = update_actual_price(actual_price, target_timestamp)
+        updated = update_actual_price(actual_price, target_timestamp, "5-min")
         if updated:
             print(f"✅ Actual price {actual_price} logged for {target_timestamp}")
         else:
