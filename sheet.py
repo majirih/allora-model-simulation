@@ -1,3 +1,5 @@
+import os
+import json
 import gspread
 from google.oauth2.service_account import Credentials
 from gspread_formatting import format_cell_range, CellFormat, NumberFormat
@@ -6,7 +8,8 @@ from datetime import datetime, timezone
 # ------------------------ GOOGLE SHEETS AUTH ------------------------
 
 def authorize_gspread():
-    creds = Credentials.from_service_account_file("credentials.json", scopes=[
+    creds_path = os.environ.get("GOOGLE_CREDS_PATH", "credentials.json")
+    creds = Credentials.from_service_account_file(creds_path, scopes=[
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ])
@@ -119,3 +122,38 @@ def update_actual_price(actual_price, target_timestamp_iso, timeframe):
 
     print("⚠️ No matching row found within ±30s of provided timestamp.")
     return False
+
+# ------------------------ TIMESTAMP SAVER FOR CLOUD ------------------------
+
+def save_timestamp_to_sheet(timeframe, timestamp, predicted_price):
+    client = authorize_gspread()
+    sheet = client.open("Allora_Model_Performance_Report").worksheet("Log_Timestamps")
+    data = sheet.get_all_values()
+
+    updated = False
+    for i in range(1, len(data)):
+        if data[i][0].strip().lower() == timeframe.lower():
+            sheet.update_cell(i + 1, 2, timestamp)
+            sheet.update_cell(i + 1, 3, predicted_price)
+            updated = True
+            print(f"🔁 Updated timestamp for {timeframe} in Log_Timestamps.")
+            break
+
+    if not updated:
+        row = [timeframe, timestamp, predicted_price]
+        sheet.append_row(row)
+        print(f"🆕 Added timestamp for {timeframe} in Log_Timestamps.")
+
+# ------------------------ TIMESTAMP LOADER FROM CLOUD ------------------------
+
+def load_timestamp_from_sheet(timeframe):
+    client = authorize_gspread()
+    sheet = client.open("Allora_Model_Performance_Report").worksheet("Log_Timestamps")
+    data = sheet.get_all_values()
+
+    for i in range(1, len(data)):
+        if data[i][0].strip().lower() == timeframe.lower():
+            return data[i][1]  # timestamp string
+
+    print(f"⚠️ No saved timestamp for {timeframe} in Log_Timestamps.")
+    return None

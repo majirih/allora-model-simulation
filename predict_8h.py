@@ -3,7 +3,7 @@ from sheet import log_prediction_only
 import json
 from datetime import datetime
 
-def run_prediction():
+def run_8h_prediction():
     print("🔁 Running 8h prediction logging...")
 
     prediction = fetch_8h_prediction()
@@ -15,15 +15,15 @@ def run_prediction():
 
     predicted_price = prediction["predicted_price"]
 
-    # ✅ Use current UTC timestamp since Allora doesn’t return it
+    # Use current UTC timestamp (Allora doesn't return one)
     timestamp = datetime.utcnow().isoformat()
 
     print(f"✅ Logged 8h Predicted: {predicted_price} at {timestamp}")
     log_prediction_only(predicted_price, timestamp, "8h")
 
-    # ✅ Save timestamp to file so actual logger can match it later
+    # Save timestamp for actual logging later
     with open("last_predicted_8h.json", "w") as f:
         json.dump({"timestamp": timestamp}, f)
 
 if __name__ == "__main__":
-    run_prediction()
+    run_8h_prediction()
