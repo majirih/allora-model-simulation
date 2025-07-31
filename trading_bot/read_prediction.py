@@ -1,7 +1,6 @@
 import os
 import json
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 def get_latest_5min_prediction(sheet_name='Allora_Model_Performance_Report', worksheet_name='5min Forecast'):
 
