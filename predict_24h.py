@@ -2,7 +2,7 @@ from allora_api import fetch_24h_log_return
 from sheet import log_prediction_only
 from price_fetcher import get_actual_btc_price
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 def run_24h_prediction():
     print("🔁 Running 24h prediction (log-return format)...")
@@ -20,11 +20,18 @@ def run_24h_prediction():
     predicted_price = prediction["predicted_price"]
     timestamp = prediction["timestamp"]
 
+    # Fallback timestamp if empty
+    if not timestamp:
+        timestamp = datetime.now(timezone.utc).isoformat()
+
     print(f"📦 24h predicted absolute price: {predicted_price} at {timestamp}")
     log_prediction_only(predicted_price, timestamp, "24h")
 
-    with open("last_predicted_24h.json", "w") as f:
-        json.dump({"timestamp": timestamp}, f)
+    try:
+        with open("last_predicted_24h.json", "w") as f:
+            json.dump({"timestamp": timestamp}, f)
+    except Exception as e:
+        print("⚠️ Could not save timestamp locally:", e)
 
     print("✅ 24h prediction logged and timestamp saved.")
 
