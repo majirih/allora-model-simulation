@@ -8,19 +8,16 @@ from datetime import datetime, timezone
 # ------------------------ GOOGLE SHEETS AUTH ------------------------
 
 def authorize_gspread():
-    google_creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")  # Environment variable
-
+    google_creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
     if not google_creds_json:
         raise Exception("GOOGLE_CREDENTIALS_JSON environment variable not set!")
 
     creds_dict = json.loads(google_creds_json)
-
     creds = Credentials.from_service_account_info(creds_dict, scopes=[
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ])
     return gspread.authorize(creds)
-
 
 # ------------------------ TIMEFRAME TO WORKSHEET NAME ------------------------
 
