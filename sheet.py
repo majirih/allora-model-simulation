@@ -1,6 +1,8 @@
 import os
 import json
 import gspread
+from dotenv import load_dotenv
+load_dotenv()
 from google.oauth2.service_account import Credentials
 from gspread_formatting import format_cell_range, CellFormat, NumberFormat
 from datetime import datetime, timezone
@@ -18,6 +20,9 @@ def authorize_gspread():
         "https://www.googleapis.com/auth/drive"
     ])
     return gspread.authorize(creds)
+
+print("🛠 Length of GOOGLE_CREDS_JSON:", len(os.environ.get("GOOGLE_CREDS_JSON", "")))
+
 
 # ------------------------ TIMEFRAME TO WORKSHEET NAME ------------------------
 
