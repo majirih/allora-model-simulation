@@ -10,9 +10,9 @@ from datetime import datetime, timezone
 # ------------------------ GOOGLE SHEETS AUTH ------------------------
 
 def authorize_gspread():
-    google_creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
+    google_creds_json = os.environ.get("GOOGLE_CREDS_JSON")
     if not google_creds_json:
-        raise Exception("GOOGLE_CREDENTIALS_JSON environment variable not set!")
+        raise Exception("GOOGLE_CREDS_JSON environment variable not set!")
 
     creds_dict = json.loads(google_creds_json)
     creds = Credentials.from_service_account_info(creds_dict, scopes=[
