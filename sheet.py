@@ -11,12 +11,14 @@ from datetime import datetime, timezone
 
 
 def authorize_gspread():
-    google_creds_json = os.environ.get("GOOGLE_CREDS_JSON")
+    google_creds_json = os.getenv("GOOGLE_CREDS_JSON")
+
     if not google_creds_json:
         raise Exception("GOOGLE_CREDS_JSON environment variable not set!")
 
-    # 🔁 Fix escaped newlines and quotes (critical)
-    google_creds_json = google_creds_json.encode('utf-8').decode('unicode_escape')
+    # Fix double-escaped newlines only if needed
+    if "\\n" in google_creds_json:
+        google_creds_json = google_creds_json.replace('\\n', '\n')
 
     creds_dict = json.loads(google_creds_json)
 
@@ -24,10 +26,9 @@ def authorize_gspread():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ])
-    return gspread.authorize(creds)
 
-
-
+    print("✅ Authorized gspread client.")
+    return creds
 
 
 # ------------------------ TIMEFRAME TO WORKSHEET NAME ------------------------
